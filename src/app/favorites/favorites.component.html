@@ -1,0 +1,52 @@
+<div app-theme>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col mt-4">
+                <div *ngIf="favsData && favsData.length; else favsNotExist">
+                    <span *ngIf="this.celsius" class="changeTemoUnits">Change from Celsius to Fahrenheit </span>
+                    <span *ngIf="!this.celsius" class="changeTemoUnits">Change from Fahrenheit to Celsius </span>
+                    <button class="btn btn-outline-primary tempUnitsButton" (click)="toggleCelsiusFahrenheit();">To
+                        {{this?.celsius ? '°F' : '°C'}}
+                    </button>
+                </div>
+                <ng-template #favsNotExist>
+                    <h2>You have no favorites yet!</h2>
+                </ng-template>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col col-lg-2 col-md-3 weatherBlocksFav" *ngFor="let fav of favsData"
+                [ngClass]="fav.celsius < 15 ? 'tempCold' : fav.celsius > 15 && fav.celsius < 27 ? 'tempNice' : 'tempHot'">
+                <div class="row">
+                    
+                    <div class="col">
+                        <button type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true" class="removeBtn" (click)="removeFavorite(fav.ID);">&times;</span>
+                        </button>
+                    </div>
+                </div>
+                <div (click)="onSelectFav(fav)" routerLinkActive="active" class="linkToWeather">
+                    <p class="text-center textBlock mb-4">
+                        {{fav.name}}
+                    </p>
+                    <p *ngIf="celsius === true" class="text-center textBlock mb-5">
+                        {{fav.celsius}} °C
+                    </p>
+                    <p *ngIf="celsius === false" class="text-center textBlock mb-5">
+                        {{fav.fahrenheit}} °F
+                    </p>
+                    <p class="text-center textBlock">
+                        {{fav.currentWeather}}
+                    </p>
+                    <div class="row mt-5">
+                        <div class="col moreDetailsBtn">
+                            <button class="btn btn-outline-dark" (click)="onSelectFav(fav)"
+                                routerLinkActive="active">More
+                                Details</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

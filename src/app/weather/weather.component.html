@@ -1,0 +1,102 @@
+<div class="container " app-theme>
+    <div class="row justify-content-center mt-2">
+        <div class="col-12 col-md-10 col-lg-8 col-sm-12">
+            <form class="card card-sm" [formGroup]="weatherSearchForm"
+                (ngSubmit)="sendToAPIXU(weatherSearchForm.value)">
+                <div class="card-body row no-gutters align-items-center">
+                    <div class="col-auto">
+                        <i class="fas fa-search h4 text-body"></i>
+                    </div>
+                    <div class="col">
+                        <input class="form-control form-control-lg form-control-borderless" type="search"
+                            formControlName="location" name="location" />
+                    </div>
+
+                    <div class="col-auto">
+                        <button class="btn btn-lg btn-outline-primary btn-md" type="submit">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="mt-5 justify-content-center" *ngIf="loading && !foundSearch">
+        <div class="row">
+            <div class="col">
+                <div class="wrapper mt-4">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="shadow"></div>
+                    <div class="shadow"></div>
+                    <div class="shadow"></div>
+                    <span>Loading</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid weatherContainer " *ngIf="!loading">
+        <div class="justify-content-center" *ngIf="!foundSearch">
+            <div class="alert alert-danger" style="text-align:center;">
+                <span>Error, please search for a valid city in order to get the forecast! </span>
+            </div>
+        </div>
+        <div *ngIf="foundSearch">
+            <div class="container-fluid">
+                <div class="row">
+                    <div>
+                        <img class="col weatherImg img-fluid img-thumbnail"
+                            src="https://developer.accuweather.com/sites/default/files/{{this.currentWeatherCondition.WeatherIcon <= 9 ? '0' + this.currentWeatherCondition.WeatherIcon : this.currentWeatherCondition.WeatherIcon }}-s.png"
+                            alt="image responsive"
+                            [ngClass]="this.currentWeatherCondition.Temperature.Metric.Value < 15 ? 'tempCold' : this.currentWeatherCondition.Temperature.Metric.Value > 15 && this.currentWeatherCondition.Temperature.Metric.Value < 27 ? 'tempNice' : 'tempHot'" />
+
+                    </div>
+                    <div class="col">
+                        <span id="cityDiv" class="searchedSpan">{{this?.cityName}}</span><br />
+                        <i class="fas fa-thermometer-half "></i><span
+                            class="temprature">{{this.celsius ? this.currentWeatherCondition.Temperature.Metric.Value : this?.currentWeatherCondition.Temperature.Imperial.Value}}{{this.getUnit()}}</span>
+                        <button class="btn btn-outline-primary tempButton" (click)="toggleCelsiusFahrenheit();">To
+                            {{this?.celsius ? '°F' : '°C'}}
+                        </button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-outline-primary buttonFavIcon"
+                            (click)="toggleAddToFav();">{{this.isFavorited ? 'Remove From Favorites' : 'Add To Favorites'}}
+                        </button>
+
+                        <i *ngIf="!this.isFavorited" class="far fa-heart "
+                            [ngClass]="{'active': !this.isFavorited}"></i>
+                        <i *ngIf="this.isFavorited" class="fas fa-heart " [ngClass]="{'active': this.isFavorited}"></i>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!--Weather Condition -->
+                    <div class="col col12 weatherCondition">
+                        <span>{{this.currentWeatherCondition.WeatherText}}</span><br/><br/>
+                    </div>
+                </div>
+
+                <div class="container-fluid blocksContainer">
+                    <div class="row mb-3" *ngIf="cityData.length">
+                        <div class="col col2 w-100 weatherBlocks" *ngFor="let day of cityData"
+                            [ngClass]="this.getUnitAvg(day?.Temperature.Minimum.Value, day?.Temperature.Maximum.Value) < 15 ? 'tempCold' : this.getUnitAvg(day?.Temperature.Minimum.Value, day?.Temperature.Maximum.Value) > 15 && this.getUnitAvg(day?.Temperature.Minimum.Value, day?.Temperature.Maximum.Value) < 27 ? 'tempNice' : 'tempHot'">
+                            <p class="text-center textInBlocks mb-4">
+                                <span>{{this.getDayName(day?.Date).substring(0, 3)}}</span>
+                            </p>
+                            <p *ngIf="celsius === true" class="text-center textInBlocks">
+                                {{this.getUnitAvg(day?.Temperature.Minimum.Value, day?.Temperature.Maximum.Value).toFixed(2)}}
+                                °C
+                            </p>
+                            <p *ngIf="celsius === false" class="text-center textInBlocks">
+                                {{this.getFahrenheit(this.getUnitAvg(day?.Temperature.Minimum.Value, day?.Temperature.Maximum.Value)).toFixed(2)}}
+                                °F
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

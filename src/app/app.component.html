@@ -1,0 +1,41 @@
+<div app-theme>
+  <nav class="navbar navbar-icon-top navbar-expand-lg nav-pills mynavbar ">
+    <a class="navbar-brand" routerLink="/weather">
+      <h2 style="color:white;" class="mt-auto mb-auto">Weather App</h2>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto"></ul>
+      <ul class="navbar-nav ">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/weather" routerLinkActive="active"><span class="navWords">Weather</span>
+              <i class="fa fa-cloud-sun-rain"></i>
+            </a>
+          </li>
+          <li class="nav-item mr-4">
+            <a class="nav-link" routerLink="/favorites" routerLinkActive="active"><span
+                class="navWords">Favorites</span>
+              <i class="fa fa-star">
+                <span class="badge badge-pill badge-warning ">{{numOfFavs}}</span>
+              </i>
+            </a>
+          </li>
+          <li class="nav-item mt-4">
+            <span class="theme-text">Light</span>
+            <label class="switch">
+              <input type="checkbox" (click)="changeTheme()">
+              <span class="slider round"></span>
+            </label>
+            <span class="theme-text">Dark</span>
+          </li>
+        </ul>
+      </ul>
+    </div>
+  </nav>
+  <router-outlet></router-outlet>
+</div>
